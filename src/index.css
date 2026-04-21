@@ -151,6 +151,26 @@ h2 {
   font-weight: 600;
 }
 
+.file-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.file-card__remove {
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  background: rgba(248, 113, 113, 0.14);
+  color: #fecaca;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+
+.file-card__remove:hover {
+  background: rgba(248, 113, 113, 0.24);
+}
+
 .file-card__filename {
   color: #e2e8f0;
   word-break: break-word;

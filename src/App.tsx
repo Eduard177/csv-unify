@@ -110,6 +110,7 @@ function App() {
           fileName={tarjetas.file?.name ?? null}
           error={tarjetas.error}
           onChange={(file) => handleFileSelection('tarjetas', file)}
+          onRemove={() => handleFileSelection('tarjetas', null)}
         />
         <FileInputCard
           id="prestamos-file"
@@ -118,6 +119,7 @@ function App() {
           fileName={prestamos.file?.name ?? null}
           error={prestamos.error}
           onChange={(file) => handleFileSelection('prestamos', file)}
+          onRemove={() => handleFileSelection('prestamos', null)}
         />
       </section>
 
