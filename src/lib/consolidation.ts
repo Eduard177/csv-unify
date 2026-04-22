@@ -8,6 +8,7 @@ import {
   parseDominicanAmount,
   parseInteger,
 } from './format'
+import { normalizePhoneOrKeepRaw } from './phone'
 import type {
   ConsolidatedClient,
   ContactSnapshot,
@@ -26,13 +27,20 @@ function normalizeContact(row: RawCsvRow): ContactSnapshot {
   return {
     cif: getColumnValue(row, 'cif', 'tarjetas') || getColumnValue(row, 'cif', 'prestamos'),
     cliente: getColumnValue(row, 'cliente', 'tarjetas') || getColumnValue(row, 'cliente', 'prestamos'),
-    telPrincipal:
+    telPrincipal: normalizePhoneOrKeepRaw(
       getColumnValue(row, 'telPrincipal', 'tarjetas') ||
-      getColumnValue(row, 'telPrincipal', 'prestamos'),
-    celular: getColumnValue(row, 'celular', 'tarjetas') || getColumnValue(row, 'celular', 'prestamos'),
-    telCasa: getColumnValue(row, 'telCasa', 'tarjetas') || getColumnValue(row, 'telCasa', 'prestamos'),
-    telTrabajo:
-      getColumnValue(row, 'telTrabajo', 'tarjetas') || getColumnValue(row, 'telTrabajo', 'prestamos'),
+        getColumnValue(row, 'telPrincipal', 'prestamos'),
+    ),
+    celular: normalizePhoneOrKeepRaw(
+      getColumnValue(row, 'celular', 'tarjetas') || getColumnValue(row, 'celular', 'prestamos'),
+    ),
+    telCasa: normalizePhoneOrKeepRaw(
+      getColumnValue(row, 'telCasa', 'tarjetas') || getColumnValue(row, 'telCasa', 'prestamos'),
+    ),
+    telTrabajo: normalizePhoneOrKeepRaw(
+      getColumnValue(row, 'telTrabajo', 'tarjetas') ||
+        getColumnValue(row, 'telTrabajo', 'prestamos'),
+    ),
     fechaAsignacion:
       getColumnValue(row, 'fechaAsignacion', 'tarjetas') ||
       getColumnValue(row, 'fechaAsignacion', 'prestamos'),

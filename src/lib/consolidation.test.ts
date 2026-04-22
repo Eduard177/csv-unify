@@ -46,6 +46,8 @@ describe('consolidateCsvData', () => {
       cliente: 'Ana Perez Actualizada',
       tiene_tarjeta: 'SI',
       tiene_prestamo: 'SI',
+      tel_principal: '+18092222222',
+      celular: '+18292222222',
       monto_total_consolidado: '227617.30',
       pago_total_inmediato: '15500.00',
       max_atraso_global: 65,
