@@ -1,4 +1,4 @@
-import { getColumnValue, inferCurrency } from './columns'
+import { getColumnValue, hasLogicalColumn, inferCurrency } from './columns'
 import {
   cleanCedula,
   formatAmount,
@@ -263,9 +263,33 @@ export function getFileLabel(dataset: InputDataset): string {
 
 export function getAcceptedFileError(file: File): string | null {
   const lowerName = normalizeText(file.name).toLowerCase()
-  if (!lowerName.endsWith('.csv')) {
-    return 'Solo se permiten archivos CSV.'
+  if (!lowerName.endsWith('.csv') && !lowerName.endsWith('.xlsx')) {
+    return 'Solo se permiten archivos CSV o XLSX.'
   }
 
   return null
+}
+
+export function getMissingRequiredColumnsMessage(
+  rows: RawCsvRow[],
+  dataset: InputDataset,
+): string | null {
+  const firstRow = rows[0]
+  if (!firstRow) {
+    return 'El archivo no contiene filas para procesar.'
+  }
+
+  const missingColumns = []
+
+  if (!hasLogicalColumn(firstRow, 'cedula', dataset)) {
+    missingColumns.push('cedula')
+  }
+
+  if (!hasLogicalColumn(firstRow, 'balance', dataset)) {
+    missingColumns.push('balance')
+  }
+
+  return missingColumns.length > 0
+    ? `Faltan columnas obligatorias: ${missingColumns.join(', ')}.`
+    : null
 }

@@ -2,8 +2,15 @@ import { useMemo, useState } from 'react'
 import { FileInputCard } from './components/FileInputCard'
 import { PreviewTable } from './components/PreviewTable'
 import { StatusPanel } from './components/StatusPanel'
-import { consolidateCsvData, buildOutputFileName, getAcceptedFileError, getFileLabel, summarizeWarnings } from './lib/consolidation'
-import { buildCsvContent, parseCsvFile, triggerCsvDownload } from './lib/csv'
+import {
+  consolidateCsvData,
+  buildOutputFileName,
+  getAcceptedFileError,
+  getFileLabel,
+  getMissingRequiredColumnsMessage,
+  summarizeWarnings,
+} from './lib/consolidation'
+import { buildCsvContent, parseInputFile, triggerCsvDownload } from './lib/csv'
 import type { FileState, InputDataset, ProcessingSummary } from './lib/types'
 
 const EMPTY_FILE_STATE: FileState = {
@@ -48,7 +55,14 @@ function App() {
     }
 
     try {
-      const parsed = await parseCsvFile(file)
+      const parsed = await parseInputFile(file)
+      const schemaError = getMissingRequiredColumnsMessage(parsed.rows, dataset)
+
+      if (schemaError) {
+        setState({ file, parsed: null, error: schemaError })
+        return
+      }
+
       setState({ file, parsed, error: null })
     } catch (error) {
       setState({
@@ -106,7 +120,7 @@ function App() {
         <FileInputCard
           id="tarjetas-file"
           label={getFileLabel('tarjetas')}
-          description="Carga el corte de tarjetas. Se consolidará por cédula y moneda."
+          description="Carga el corte de tarjetas en CSV o XLSX. Se consolidará por cédula y moneda."
           fileName={tarjetas.file?.name ?? null}
           error={tarjetas.error}
           onChange={(file) => handleFileSelection('tarjetas', file)}
@@ -115,7 +129,7 @@ function App() {
         <FileInputCard
           id="prestamos-file"
           label={getFileLabel('prestamos')}
-          description="Carga el corte de préstamos. Se conservará el contacto más reciente."
+          description="Carga el corte de préstamos en CSV o XLSX. Se conservará el contacto más reciente."
           fileName={prestamos.file?.name ?? null}
           error={prestamos.error}
           onChange={(file) => handleFileSelection('prestamos', file)}

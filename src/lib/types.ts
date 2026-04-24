@@ -10,6 +10,8 @@ export interface ParsedCsvFile {
   rows: RawCsvRow[]
   rowCount: number
   fileName: string
+  sourceFormat: 'csv' | 'xlsx'
+  sheetName?: string
 }
 
 export interface ProcessWarning {

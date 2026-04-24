@@ -30,7 +30,7 @@ export function FileInputCard({
       <span className="file-card__description">{description}</span>
       <div className="file-card__actions">
         <label className="file-card__button" htmlFor={id}>
-          Seleccionar CSV
+          Seleccionar CSV o XLSX
         </label>
         {fileName ? (
           <button
@@ -47,7 +47,12 @@ export function FileInputCard({
       </div>
       <span className="file-card__filename">{fileName ?? 'Ningún archivo seleccionado'}</span>
       {error ? <span className="file-card__error">{error}</span> : null}
-      <input id={id} type="file" accept=".csv,text/csv" onChange={handleChange} />
+      <input
+        id={id}
+        type="file"
+        accept=".csv,text/csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        onChange={handleChange}
+      />
     </div>
   )
 }
