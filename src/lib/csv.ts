@@ -84,8 +84,20 @@ export async function parseInputFile(file: File): Promise<ParsedCsvFile> {
   return parseDelimitedFile(file)
 }
 
+function replaceEmptyWithNA(rows: OutputRow[]): OutputRow[] {
+  return rows.map((row) => {
+    const next: OutputRow = { ...row }
+    Object.keys(next).forEach((key) => {
+      if (next[key] === '') {
+        next[key] = 'N/A'
+      }
+    })
+    return next
+  })
+}
+
 export function buildCsvContent(rows: OutputRow[]): string {
-  return Papa.unparse(rows, {
+  return Papa.unparse(replaceEmptyWithNA(rows), {
     columns: Object.keys(rows[0] ?? {}),
   })
 }
