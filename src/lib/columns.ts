@@ -5,6 +5,9 @@ const COLUMN_ALIASES: Record<string, string[]> = {
   cedula: ['cedula', 'cédula', 'documento', 'id_cliente', 'identificacion'],
   cif: ['cif', 'codigo_cliente', 'cod_cliente'],
   cliente: ['cliente', 'nombre', 'nombre_cliente', 'deudor'],
+  saludo: ['saludo', 'titulo', 'tratamiento'],
+  firstname: ['firstname', 'first_name', 'nombre', 'first'],
+  lastname: ['lastname', 'last_name', 'apellido', 'last'],
   fechaAsignacion: ['fecha_asignacion', 'fecha asignacion', 'fecha_gestion', 'fecha'],
   telPrincipal: [
     'tel_principal',

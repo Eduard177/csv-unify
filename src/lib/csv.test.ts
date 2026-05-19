@@ -9,7 +9,9 @@ describe('buildCsvContent', () => {
       {
         cedula: '001',
         cif: '',
-        cliente: 'Ana',
+        saludo: 'Señora',
+        firstname: 'Ana',
+        lastname: 'Perez',
         tiene_tarjeta: 'SI',
         tiene_prestamo: 'NO',
         fecha_asignacion_reciente: '',
@@ -41,7 +43,9 @@ describe('buildCsvContent', () => {
       {
         cedula: '001',
         cif: '',
-        cliente: 'Ana',
+        saludo: 'Señora',
+        firstname: 'Ana',
+        lastname: 'Perez',
         tiene_tarjeta: 'SI',
         tiene_prestamo: 'NO',
         fecha_asignacion_reciente: '',

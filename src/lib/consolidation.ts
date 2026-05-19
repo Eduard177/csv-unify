@@ -26,7 +26,9 @@ const MAX_DEBTS = 10
 function normalizeContact(row: RawCsvRow): ContactSnapshot {
   return {
     cif: getColumnValue(row, 'cif', 'tarjetas') || getColumnValue(row, 'cif', 'prestamos'),
-    cliente: getColumnValue(row, 'cliente', 'tarjetas') || getColumnValue(row, 'cliente', 'prestamos'),
+    saludo: getColumnValue(row, 'saludo', 'tarjetas') || getColumnValue(row, 'saludo', 'prestamos'),
+    firstname: getColumnValue(row, 'firstname', 'tarjetas') || getColumnValue(row, 'firstname', 'prestamos'),
+    lastname: getColumnValue(row, 'lastname', 'tarjetas') || getColumnValue(row, 'lastname', 'prestamos'),
     telPrincipal: normalizePhoneOrKeepRaw(
       getColumnValue(row, 'telPrincipal', 'tarjetas') ||
         getColumnValue(row, 'telPrincipal', 'prestamos'),
@@ -128,7 +130,9 @@ function createBaseOutput(client: ConsolidatedClient, debts: NormalizedDebt[]): 
   return {
     cedula: client.cedula,
     cif: client.contact.cif,
-    cliente: client.contact.cliente,
+    saludo: client.contact.saludo,
+    firstname: client.contact.firstname,
+    lastname: client.contact.lastname,
     tiene_tarjeta: client.hasTarjeta ? 'SI' : 'NO',
     tiene_prestamo: client.hasPrestamo ? 'SI' : 'NO',
     fecha_asignacion_reciente: formatDate(client.contact.fechaAsignacion),
