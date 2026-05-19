@@ -35,8 +35,8 @@ export interface NormalizedDebt {
 export interface ContactSnapshot {
   cif: string
   saludo: string
-  firstname: string
-  lastname: string
+  first_name: string
+  last_name: string
   telPrincipal: string
   celular: string
   telCasa: string
@@ -56,8 +56,8 @@ export interface OutputRow {
   cedula: string
   cif: string
   saludo: string
-  firstname: string
-  lastname: string
+  first_name: string
+  last_name: string
   tiene_tarjeta: 'SI' | 'NO'
   tiene_prestamo: 'SI' | 'NO'
   fecha_asignacion_reciente: string

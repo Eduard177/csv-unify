@@ -48,8 +48,8 @@ describe('consolidateCsvData', () => {
     expect(result.outputRows[0]).toMatchObject({
       cedula: '00112345678',
       saludo: 'Señora',
-      firstname: 'Ana',
-      lastname: 'Perez Actualizada',
+      first_name: 'Ana',
+      last_name: 'Perez Actualizada',
       tiene_tarjeta: 'SI',
       tiene_prestamo: 'SI',
       tel_principal: '+18092222222',
@@ -66,8 +66,8 @@ describe('consolidateCsvData', () => {
     const tarjetas = Array.from({ length: 11 }, (_, index) => ({
       cedula: '40200000001',
       saludo: 'Señor',
-      firstname: 'Cliente',
-      lastname: 'Exceso',
+      first_name: 'Cliente',
+      last_name: 'Exceso',
       fecha_asignacion: '10/01/2026',
       producto: `Tarjeta ${index + 1}`,
       cuenta: `TC-${index + 1}`,

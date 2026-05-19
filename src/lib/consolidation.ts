@@ -27,8 +27,8 @@ function normalizeContact(row: RawCsvRow): ContactSnapshot {
   return {
     cif: getColumnValue(row, 'cif', 'tarjetas') || getColumnValue(row, 'cif', 'prestamos'),
     saludo: getColumnValue(row, 'saludo', 'tarjetas') || getColumnValue(row, 'saludo', 'prestamos'),
-    firstname: getColumnValue(row, 'firstname', 'tarjetas') || getColumnValue(row, 'firstname', 'prestamos'),
-    lastname: getColumnValue(row, 'lastname', 'tarjetas') || getColumnValue(row, 'lastname', 'prestamos'),
+    first_name: getColumnValue(row, 'firstname', 'tarjetas') || getColumnValue(row, 'firstname', 'prestamos'),
+    last_name: getColumnValue(row, 'lastname', 'tarjetas') || getColumnValue(row, 'lastname', 'prestamos'),
     telPrincipal: normalizePhoneOrKeepRaw(
       getColumnValue(row, 'telPrincipal', 'tarjetas') ||
         getColumnValue(row, 'telPrincipal', 'prestamos'),
@@ -131,8 +131,8 @@ function createBaseOutput(client: ConsolidatedClient, debts: NormalizedDebt[]): 
     cedula: client.cedula,
     cif: client.contact.cif,
     saludo: client.contact.saludo,
-    firstname: client.contact.firstname,
-    lastname: client.contact.lastname,
+    first_name: client.contact.first_name,
+    last_name: client.contact.last_name,
     tiene_tarjeta: client.hasTarjeta ? 'SI' : 'NO',
     tiene_prestamo: client.hasPrestamo ? 'SI' : 'NO',
     fecha_asignacion_reciente: formatDate(client.contact.fechaAsignacion),
