@@ -1,3 +1,15 @@
+## Requisitos del proyecto
+
+Node.js 24.14.0. Ejecuta `nvm use` y después `npm ci`.
+
+La exportación incluye `deuda_{1..10}_fecha_de_factura` y
+`deuda_{1..10}_estatus_facturacion` del préstamo correspondiente.
+Las columnas cuyo nombre contiene «fecha» se exportan como `DD/MM/AAAA`,
+incluidos los números de fecha de Excel. Al cargar XLSX se interpreta
+`AAAAMMDD` en tarjetas y `MM/DD/AAAA` en préstamos, incluso para fechas
+ambiguas como `11/05/2026` (5 de noviembre). Los valores
+vacíos o que no representan fechas válidas se exportan como `N/A`.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

@@ -55,7 +55,7 @@ function App() {
     }
 
     try {
-      const parsed = await parseInputFile(file)
+      const parsed = await parseInputFile(file, dataset)
       const schemaError = getMissingRequiredColumnsMessage(parsed.rows, dataset)
 
       if (schemaError) {

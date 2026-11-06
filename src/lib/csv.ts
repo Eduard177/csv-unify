@@ -1,5 +1,6 @@
 import Papa from 'papaparse'
-import type { OutputRow, ParsedCsvFile, RawCsvRow } from './types'
+import { formatDate } from './format'
+import type { InputDataset, OutputRow, ParsedCsvFile, RawCsvRow } from './types'
 
 function getFileExtension(fileName: string): string {
   const normalized = fileName.trim().toLowerCase()
@@ -7,19 +8,23 @@ function getFileExtension(fileName: string): string {
   return dotIndex >= 0 ? normalized.slice(dotIndex) : ''
 }
 
-function normalizeSheetRows(rows: Record<string, unknown>[]): RawCsvRow[] {
+function normalizeSheetRows(rows: Record<string, unknown>[], date1904: boolean, dataset?: InputDataset): RawCsvRow[] {
   return rows.map((row) => {
     const normalizedRow: RawCsvRow = {}
 
     Object.entries(row).forEach(([key, value]) => {
-      normalizedRow[key] = value == null ? '' : String(value)
+      const raw = value == null ? '' : String(value)
+      const dateValue = date1904 && typeof value === 'number' && !/^\d{8}$/.test(raw)
+        ? String(value + 1462)
+        : raw
+      normalizedRow[key] = /fecha/i.test(key) ? formatDate(dateValue, dataset === 'prestamos' ? 'month-first' : 'day-first') : raw
     })
 
     return normalizedRow
   })
 }
 
-async function parseXlsxFile(file: File): Promise<ParsedCsvFile> {
+async function parseXlsxFile(file: File, dataset?: InputDataset): Promise<ParsedCsvFile> {
   const XLSX = await import('xlsx')
   const arrayBuffer = await file.arrayBuffer()
   const workbook = XLSX.read(arrayBuffer, { type: 'array' })
@@ -34,9 +39,9 @@ async function parseXlsxFile(file: File): Promise<ParsedCsvFile> {
     XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, {
       defval: '',
     }),
+    Boolean(workbook.Workbook?.WBProps?.date1904),
+    dataset,
   )
-
-  console.log(rows)
 
   if (rows.length === 0) {
     throw new Error('El archivo Excel no contiene filas para procesar.')
@@ -74,11 +79,11 @@ async function parseDelimitedFile(file: File): Promise<ParsedCsvFile> {
   })
 }
 
-export async function parseInputFile(file: File): Promise<ParsedCsvFile> {
+export async function parseInputFile(file: File, dataset?: InputDataset): Promise<ParsedCsvFile> {
   const extension = getFileExtension(file.name)
 
   if (extension === '.xlsx') {
-    return parseXlsxFile(file)
+    return parseXlsxFile(file, dataset)
   }
 
   return parseDelimitedFile(file)
@@ -88,6 +93,9 @@ function replaceEmptyWithNA(rows: OutputRow[]): OutputRow[] {
   return rows.map((row) => {
     const next: OutputRow = { ...row }
     Object.keys(next).forEach((key) => {
+      if (/fecha/i.test(key)) {
+        next[key] = formatDate(String(next[key]))
+      }
       if (next[key] === '') {
         next[key] = 'N/A'
       }

@@ -59,6 +59,8 @@ function normalizeDebt(row: RawCsvRow, dataset: InputDataset): NormalizedDebt {
   const currency = inferCurrency(rawCurrency || producto, dataset) as Currency
 
   return {
+    fechaFactura: dataset === 'prestamos' ? formatDate(getColumnValue(row, 'fechaFactura', dataset)) : '',
+    estatusFacturacion: dataset === 'prestamos' ? getColumnValue(row, 'estatusFacturacion', dataset) : '',
     tipo: dataset === 'tarjetas' ? 'tarjeta' : 'prestamo',
     producto: producto || (dataset === 'tarjetas' ? 'Tarjeta' : 'Préstamo'),
     cuenta: getColumnValue(row, 'cuenta', dataset),
@@ -165,6 +167,8 @@ function appendDebtSlots(row: OutputRow, debts: NormalizedDebt[]): OutputRow {
     nextRow[`deuda_${slot}_minimo`] = debt ? formatAmount(debt.minimo) : ''
     nextRow[`deuda_${slot}_atraso`] = debt?.atraso ?? ''
     nextRow[`deuda_${slot}_moneda`] = debt?.moneda ?? ''
+    nextRow[`deuda_${slot}_fecha_de_factura`] = debt?.fechaFactura ?? ''
+    nextRow[`deuda_${slot}_estatus_facturacion`] = debt?.estatusFacturacion ?? ''
   }
 
   return nextRow

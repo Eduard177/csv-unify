@@ -154,3 +154,33 @@ describe('consolidateCsvData', () => {
     })
   })
 })
+
+it('conserva la facturacion del prestamo al ordenar las deudas y crea los diez slots', () => {
+  const result = consolidateCsvData(
+    [{ cedula: '001', balance: '100', atraso: '30', 'PR FECHA DE FACTURA': '11/18/2026' }],
+    [
+      { cedula: '001', balance: '10', atraso: '1', cuenta: 'PR1', 'PR FECHA DE FACTURA': '11/18/2026', 'PR ESTATUS FACTURACION': 'Factura en el mes actual' },
+      { cedula: '001', balance: '20', atraso: '2', cuenta: 'PR2', 'PR FECHA DE FACTURA': '46329', 'PR ESTATUS FACTURACION': 'Pendiente' },
+    ],
+  )
+  expect(result.outputRows[0]).toMatchObject({
+    'deuda_1_fecha_de_factura': '',
+    'deuda_1_estatus_facturacion': '',
+    deuda_2_cuenta: 'PR2',
+    'deuda_2_fecha_de_factura': '03/11/2026',
+    'deuda_2_estatus_facturacion': 'Pendiente',
+    'deuda_3_fecha_de_factura': '18/11/2026',
+    'deuda_3_estatus_facturacion': 'Factura en el mes actual',
+    'deuda_10_fecha_de_factura': '',
+    'deuda_10_estatus_facturacion': '',
+  })
+})
+
+it('elige el contacto mas reciente con fechas dia/mes y seriales Excel', () => {
+  const result = consolidateCsvData([
+    { cedula: '001', balance: '1', fecha_asignacion: '12/03/2026', firstname: 'Anterior' },
+    { cedula: '001', balance: '1', fecha_asignacion: '04/11/2026', firstname: 'Reciente' },
+    { cedula: '001', balance: '1', fecha_asignacion: '46329', firstname: 'Intermedio' },
+  ], [])
+  expect(result.outputRows[0]).toMatchObject({ first_name: 'Reciente', fecha_asignacion_reciente: '04/11/2026' })
+})

@@ -22,6 +22,8 @@ export interface ProcessWarning {
 }
 
 export interface NormalizedDebt {
+  fechaFactura: string
+  estatusFacturacion: string
   tipo: ProductType
   producto: string
   cuenta: string
