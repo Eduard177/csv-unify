@@ -206,3 +206,15 @@ it('exporta los campos de préstamos en cada posición de deuda', () => {
     deuda_10_pr_treinta: '', deuda_10_pr_sesenta: '', deuda_10_pr_noventa: '',
   })
 })
+
+it('exporta la fecha de vencimiento de cada tarjeta en su deuda correspondiente', () => {
+  const result = consolidateCsvData(
+    [{ cedula: '123', balance: '100', atraso: '20', 'TC FECHA VENCE PAGO': '2026-11-18' }],
+    [{ cedula: '123', balance: '200', atraso: '30', 'PR FECHA DE FACTURA': '2026-12-03' }],
+  )
+  expect(result.outputRows[0]).toMatchObject({
+    deuda_1_fecha_de_factura: '03/12/2026',
+    deuda_2_fecha_de_factura: '18/11/2026',
+    deuda_3_fecha_de_factura: '',
+  })
+})

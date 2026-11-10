@@ -66,7 +66,7 @@ function normalizeDebt(row: RawCsvRow, dataset: InputDataset): NormalizedDebt {
     prTreinta: dataset === 'prestamos' ? getColumnValue(row, 'prTreinta', dataset) : '',
     prSesenta: dataset === 'prestamos' ? getColumnValue(row, 'prSesenta', dataset) : '',
     prNoventa: dataset === 'prestamos' ? getColumnValue(row, 'prNoventa', dataset) : '',
-    fechaFactura: dataset === 'prestamos' ? formatDate(getColumnValue(row, 'fechaFactura', dataset)) : '',
+    fechaFactura: formatDate(getColumnValue(row, dataset === 'prestamos' ? 'fechaFactura' : 'fechaVencePago', dataset)),
     estatusFacturacion: dataset === 'prestamos' ? getColumnValue(row, 'estatusFacturacion', dataset) : '',
     tipo: dataset === 'tarjetas' ? 'tarjeta' : 'prestamo',
     producto: producto || (dataset === 'tarjetas' ? 'Tarjeta' : 'Préstamo'),
