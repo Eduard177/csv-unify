@@ -10,6 +10,9 @@ const COLUMN_ALIASES: Record<string, string[]> = {
   lastname: ['lastname', 'last_name', 'apellido', 'last'],
   fechaFactura: ['pr fecha de factura', 'fecha de factura', 'fecha_factura'],
   estatusFacturacion: ['pr estatus facturacion', 'estatus facturacion'],
+  prTreinta: ['pr treinta'],
+  prSesenta: ['pr sesenta'],
+  prNoventa: ['pr noventa'],
   fechaAsignacion: ['fecha_asignacion', 'fecha asignacion', 'fecha_gestion', 'fecha'],
   telPrincipal: [
     'tel_principal',

@@ -24,11 +24,15 @@ import type {
 const MAX_DEBTS = 10
 
 function normalizeContact(row: RawCsvRow): ContactSnapshot {
+  const firstName = getColumnValue(row, 'firstname', 'tarjetas')
+  const lastName = getColumnValue(row, 'lastname', 'tarjetas')
+  const fullName = getColumnValue(row, 'cliente', 'tarjetas') || firstName
+  const words = fullName.split(/\s+/).filter(Boolean)
   return {
     cif: getColumnValue(row, 'cif', 'tarjetas') || getColumnValue(row, 'cif', 'prestamos'),
     saludo: getColumnValue(row, 'saludo', 'tarjetas') || getColumnValue(row, 'saludo', 'prestamos'),
-    first_name: getColumnValue(row, 'firstname', 'tarjetas') || getColumnValue(row, 'firstname', 'prestamos'),
-    last_name: getColumnValue(row, 'lastname', 'tarjetas') || getColumnValue(row, 'lastname', 'prestamos'),
+    first_name: lastName ? firstName : (words[0] ?? ''),
+    last_name: lastName || (words[words.length > 3 ? 2 : 1] ?? ''),
     telPrincipal: normalizePhoneOrKeepRaw(
       getColumnValue(row, 'telPrincipal', 'tarjetas') ||
         getColumnValue(row, 'telPrincipal', 'prestamos'),
@@ -59,6 +63,9 @@ function normalizeDebt(row: RawCsvRow, dataset: InputDataset): NormalizedDebt {
   const currency = inferCurrency(rawCurrency || producto, dataset) as Currency
 
   return {
+    prTreinta: dataset === 'prestamos' ? getColumnValue(row, 'prTreinta', dataset) : '',
+    prSesenta: dataset === 'prestamos' ? getColumnValue(row, 'prSesenta', dataset) : '',
+    prNoventa: dataset === 'prestamos' ? getColumnValue(row, 'prNoventa', dataset) : '',
     fechaFactura: dataset === 'prestamos' ? formatDate(getColumnValue(row, 'fechaFactura', dataset)) : '',
     estatusFacturacion: dataset === 'prestamos' ? getColumnValue(row, 'estatusFacturacion', dataset) : '',
     tipo: dataset === 'tarjetas' ? 'tarjeta' : 'prestamo',
@@ -169,6 +176,9 @@ function appendDebtSlots(row: OutputRow, debts: NormalizedDebt[]): OutputRow {
     nextRow[`deuda_${slot}_moneda`] = debt?.moneda ?? ''
     nextRow[`deuda_${slot}_fecha_de_factura`] = debt?.fechaFactura ?? ''
     nextRow[`deuda_${slot}_estatus_facturacion`] = debt?.estatusFacturacion ?? ''
+    nextRow[`deuda_${slot}_pr_treinta`] = debt?.prTreinta ?? ''
+    nextRow[`deuda_${slot}_pr_sesenta`] = debt?.prSesenta ?? ''
+    nextRow[`deuda_${slot}_pr_noventa`] = debt?.prNoventa ?? ''
   }
 
   return nextRow

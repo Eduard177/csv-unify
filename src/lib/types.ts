@@ -22,6 +22,9 @@ export interface ProcessWarning {
 }
 
 export interface NormalizedDebt {
+  prTreinta: string
+  prSesenta: string
+  prNoventa: string
   fechaFactura: string
   estatusFacturacion: string
   tipo: ProductType

@@ -184,3 +184,25 @@ it('elige el contacto mas reciente con fechas dia/mes y seriales Excel', () => {
   ], [])
   expect(result.outputRows[0]).toMatchObject({ first_name: 'Reciente', fecha_asignacion_reciente: '04/11/2026' })
 })
+
+it.each([
+  ['Ana Perez', 'Ana', 'Perez'],
+  ['Ana Perez Lopez', 'Ana', 'Perez'],
+  ['Ana Maria Perez Lopez', 'Ana', 'Perez'],
+  ['Ana', 'Ana', ''],
+])('separa el nombre completo %s', (cliente, firstName, lastName) => {
+  const result = consolidateCsvData([{ cedula: '123', cliente, balance: '100' }], [])
+  expect(result.outputRows[0]).toMatchObject({ first_name: firstName, last_name: lastName })
+})
+
+it('exporta los campos de préstamos en cada posición de deuda', () => {
+  const result = consolidateCsvData(
+    [{ cedula: '123', cliente: 'Ana Perez', balance: '200', atraso: '90' }],
+    [{ cedula: '123', cliente: 'Ana Perez', balance: '100', 'PR TREINTA': '12.50', 'PR SESENTA': '25', 'PR NOVENTA': '50' }],
+  )
+  expect(result.outputRows[0]).toMatchObject({
+    deuda_1_pr_treinta: '', deuda_1_pr_sesenta: '', deuda_1_pr_noventa: '',
+    deuda_2_pr_treinta: '12.50', deuda_2_pr_sesenta: '25', deuda_2_pr_noventa: '50',
+    deuda_10_pr_treinta: '', deuda_10_pr_sesenta: '', deuda_10_pr_noventa: '',
+  })
+})
