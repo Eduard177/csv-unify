@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { consolidateCsvData, getMissingRequiredColumnsMessage } from './consolidation'
+import { buildCsvContent } from './csv'
 
 describe('consolidateCsvData', () => {
   it('unifica deudas por cedula y conserva el contacto mas reciente', () => {
@@ -205,6 +206,22 @@ it('exporta los campos de préstamos en cada posición de deuda', () => {
     deuda_2_pr_treinta: '12.50', deuda_2_pr_sesenta: '25', deuda_2_pr_noventa: '50',
     deuda_10_pr_treinta: '', deuda_10_pr_sesenta: '', deuda_10_pr_noventa: '',
   })
+})
+
+it('exporta el indicador reestructurado en la posición de cada préstamo', () => {
+  const result = consolidateCsvData(
+    [{ cedula: '123', balance: '300', atraso: '30', 'Flag reestructurado': 'ignorar' }],
+    [
+      { cedula: '123', balance: '100', atraso: '10', 'Flag reestructurado': 'SI' },
+      { cedula: '123', balance: '200', atraso: '20', 'Flag reestructurado': 'NO' },
+    ],
+  )
+  expect(result.outputRows[0]).toMatchObject({
+    pr_1_restructurado: '', pr_2_restructurado: 'NO', pr_3_restructurado: 'SI', pr_10_restructurado: '',
+  })
+  const csv = buildCsvContent(result.outputRows)
+  expect(csv.split('\r\n')[0]).toContain('pr_2_restructurado')
+  expect(csv.split('\r\n')[1]).toContain('NO')
 })
 
 it('exporta la fecha de vencimiento de cada tarjeta en su deuda correspondiente', () => {

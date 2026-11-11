@@ -22,6 +22,7 @@ export interface ProcessWarning {
 }
 
 export interface NormalizedDebt {
+  flagReestructurado: string
   prTreinta: string
   prSesenta: string
   prNoventa: string

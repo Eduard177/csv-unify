@@ -14,6 +14,7 @@ const COLUMN_ALIASES: Record<string, string[]> = {
   prTreinta: ['pr treinta'],
   prSesenta: ['pr sesenta'],
   prNoventa: ['pr noventa'],
+  flagReestructurado: ['flag reestructurado'],
   fechaAsignacion: ['fecha_asignacion', 'fecha asignacion', 'fecha_gestion', 'fecha'],
   telPrincipal: [
     'tel_principal',
